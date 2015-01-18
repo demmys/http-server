@@ -5,7 +5,7 @@ TARGET = server
 OBJDIR = ./obj
 SRCS = $(wildcard *.c)
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
-DEPS = $(OBJECTS:.o=.d)
+DEPS = $(OBJS:.o=.d)
 
 $(TARGET): $(OBJS)
 	$(CC) -o $@ $^
