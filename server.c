@@ -48,6 +48,7 @@ bool server_listen(Server *this, void (*callback)(int)) {
     struct sockaddr_storage from;
     socklen_t fromlen;
     Socket *s;
+    pid_t pid;
 
     FD_ZERO(&fds);
     for(s = this->_sock; s; s = s->next) {
@@ -65,7 +66,16 @@ bool server_listen(Server *this, void (*callback)(int)) {
                 if(l < 0) {
                     continue;
                 }
-                callback(l);
+                pid = fork();
+                if(pid == -1) {
+                    close(l);
+                    return false;
+                }
+                if(pid == 0) {
+                    close(s->fd);
+                    callback(l);
+                    exit(EXIT_SUCCESS);
+                }
                 close(l);
             }
         }

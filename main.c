@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "server.h"
 
 void receive(int fd) {
